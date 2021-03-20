@@ -9,6 +9,9 @@ const loginRoutes = require('./routes/loginRoutes')
 const userRoutes = require('./routes/userRoutes')
 const courseRoutes = require('./routes/courseRoutes')
 
+// custom middlewares import
+const verifyAuth = require('./middlewares/authMiddleware')
+
 // express app initialization
 const app = express()
 
@@ -17,8 +20,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/login', loginRoutes)
-app.use('/users', userRoutes)
-app.use('/courses', courseRoutes)
+app.use('/users', verifyAuth, userRoutes)
+app.use('/courses', verifyAuth, courseRoutes)
 
 // 404 error handling
 app.use((req, res) => {
