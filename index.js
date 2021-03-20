@@ -7,6 +7,7 @@ const cors = require('cors')
 // routes
 const loginRoutes = require('./routes/loginRoutes')
 const userRoutes = require('./routes/userRoutes')
+const courseRoutes = require('./routes/courseRoutes')
 
 // express app initialization
 const app = express()
@@ -17,6 +18,7 @@ app.use(cors())
 
 app.use('/login', loginRoutes)
 app.use('/users', userRoutes)
+app.use('/courses', courseRoutes)
 
 // 404 error handling
 app.use((req, res) => {

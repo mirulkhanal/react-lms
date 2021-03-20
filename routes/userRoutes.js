@@ -86,4 +86,31 @@ router.delete('/delete/:id', (req, res) => {
   }
 })
 
+// edit user based on id
+router.patch('/edit/:id', (req, res) => {
+  const userID = req.params.id
+  const property = req.body.property
+  const newValue = req.body.value
+  if (property === 'name' || property === 'email') {
+    db.query(
+      `UPDATE users SET ${property} = ? WHERE id = ?`,
+      [newValue, userID],
+      (err) => {
+        if (err) {
+          res.status(501).send({
+            error: err,
+          })
+        }
+        res.send({
+          message: 'Successfully updated the user',
+        })
+      }
+    )
+  } else {
+    res.status(501).send({
+      error: 'Cannot edit userID, userName or password',
+    })
+  }
+})
+
 module.exports = router
