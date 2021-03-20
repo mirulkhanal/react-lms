@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
       })
     } else {
       req.user = user
-      console.log(user)
       next()
     }
   } else {
