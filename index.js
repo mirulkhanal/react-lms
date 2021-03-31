@@ -1,27 +1,38 @@
 const express = require('express')
 const cors = require('cors')
-
-// const bcrypt = require('bcrypt')
-// const db = require('./models/db')
+const cookieParser = require('cookie-parser')
 
 // routes
-const loginRoutes = require('./routes/loginRoutes')
+const authRoutes = require('./routes/authRoutes')
 const userRoutes = require('./routes/userRoutes')
 const courseRoutes = require('./routes/courseRoutes')
-
+const studentRoutes = require('./routes/studentRoutes')
+const noticeRoutes = require('./routes/noticeRoutes')
 // custom middlewares import
-const verifyAuth = require('./middlewares/authMiddleware')
+const {
+  verifyLogin,
+  verifyAdmin,
+  verifyStudent,
+} = require('./middlewares/authMiddleware')
 
 // express app initialization
 const app = express()
 
 // middlewares
 app.use(express.json())
-app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+)
+app.use(cookieParser())
 
-app.use('/login', loginRoutes)
-app.use('/users', verifyAuth, userRoutes)
-app.use('/courses', verifyAuth, courseRoutes)
+app.use('/auth', authRoutes)
+app.use('/users', verifyLogin, verifyAdmin, userRoutes)
+app.use('/courses', verifyLogin, verifyAdmin, courseRoutes)
+app.use('/student', verifyLogin, verifyAdmin, studentRoutes)
+app.use('/notice', verifyLogin, verifyAdmin, noticeRoutes)
 
 // 404 error handling
 app.use((req, res) => {

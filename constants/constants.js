@@ -1,0 +1,7 @@
+module.exports = {
+  ACCOUNT_TYPE: {
+    ADMIN: 'ACCOUNT_TYPE_ADMIN',
+    STUDENT: 'ACCOUNT_TYPE_STUDENT',
+    TEACHER: 'ACCOUNT_TYPE_TEACHER',
+  },
+}

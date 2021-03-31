@@ -17,38 +17,42 @@ router.get('/', (req, res) => {
 
 // create a course
 router.post('/create', (req, res) => {
-  const id = req.body.id
-  const name = req.body.name
+  const courseID = req.body.courseID
+  const courseName = req.body.courseName
   const moduleID = req.body.moduleID
 
-  if (!id || !moduleID || !name) {
+  if (!courseID || !moduleID || !courseName) {
     res.send({ message: 'Please provide all the required fields' })
   } else {
-    db.query('SELECT * FROM courses WHERE id = ?', [id], (err, results) => {
-      if (err) {
-        res.status(501).send({
-          error: err,
-        })
-      }
-      if (results.length > 0 || !results) {
-        res.status(400).send({
-          error: 'Course already exists',
-        })
-      } else {
-        db.query(
-          'INSERT INTO courses (id,name,moduleID) VALUES (?,?,?)',
-          [id, name, moduleID],
-          (err) => {
-            if (err) {
-              res.status(501).send({
-                error: errr,
-              })
+    db.query(
+      'SELECT * FROM courses WHERE courseID = ?',
+      [courseID],
+      (err, results) => {
+        if (err) {
+          res.status(501).send({
+            error: err,
+          })
+        }
+        if (results.length > 0 || !results) {
+          res.status(400).send({
+            error: 'Course already exists',
+          })
+        } else {
+          db.query(
+            'INSERT INTO courses (courseID,courseName,moduleID) VALUES (?,?,?)',
+            [courseID, courseName, moduleID],
+            (err) => {
+              if (err) {
+                res.status(501).send({
+                  error: errr,
+                })
+              }
+              res.send({ message: 'Successfully added a course' })
             }
-            res.send({ message: 'Successfully added a course' })
-          }
-        )
+          )
+        }
       }
-    })
+    )
   }
 })
 
@@ -60,10 +64,12 @@ router.patch('/edit/:id', (req, res) => {
   if (
     property &&
     newValue &&
-    (property === 'id' || property === 'name' || property === 'moduleID')
+    (property === 'courseID' ||
+      property === 'courseName' ||
+      property === 'moduleID')
   ) {
     db.query(
-      `UPDATE courses SET ${property} = ? WHERE id = ?`,
+      `UPDATE courses SET ${property} = ? WHERE courseID = ?`,
       [newValue, courseID],
       (err) => {
         if (err) {
@@ -78,7 +84,8 @@ router.patch('/edit/:id', (req, res) => {
     )
   } else {
     res.status(501).send({
-      error: "Invalid property name. Try 'name', 'id' or 'moduleID'",
+      error:
+        "Invalid property name. Try 'courseName', 'courseID' or 'moduleID'",
     })
   }
 })
@@ -88,7 +95,7 @@ router.delete('/delete/:id', (req, res) => {
   const courseID = req.params.id
 
   if (courseID) {
-    db.query('DELETE FROM courses WHERE id = ?', [courseID], (err) => {
+    db.query('DELETE FROM courses WHERE courseID = ?', [courseID], (err) => {
       if (err) {
         res.send(501).send({
           error: err,
