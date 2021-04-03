@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   LoginButton,
   TextBox,
@@ -6,11 +6,9 @@ import {
   LoginContainer,
   TextBoxContainer,
 } from './Login-styled-components'
-import { ACCOUNT_TYPE } from '../../constants'
 import { ReadingSideDoodle } from 'react-open-doodles'
 import axios from 'axios'
 import AuthContext from '../../context/AuthContext'
-import { useHistory } from 'react-router'
 
 const Login = () => {
   // saving the username and password to the app state
@@ -26,7 +24,7 @@ const Login = () => {
       })
       getLoggedIn()
     } catch (err) {
-      console.log(err)
+      console.log(err.message)
     }
   }
   return (

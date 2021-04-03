@@ -1,4 +1,5 @@
 import React from 'react'
+// import { Link } from 'react-router-dom'
 import { NoticeBoard } from './Dashboard-styled-components'
 
 const Dashboard = () => {
@@ -24,17 +25,6 @@ const Dashboard = () => {
           more recently with desktop publishing software like Aldus PageMaker
           including versions of Lorem Ipsum
         </p>
-        <ul>
-          <li>
-            <a href='#'> Link 1 </a>
-          </li>
-          <li>
-            <a href='#'> Link 2 </a>
-          </li>
-          <li>
-            <a href='#'> Link 3 </a>
-          </li>
-        </ul>
       </NoticeBoard>
     </div>
   )

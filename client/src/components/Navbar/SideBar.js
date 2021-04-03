@@ -1,7 +1,6 @@
 import React from 'react'
 import { SidebarUL, StyledLink, UserImage } from './Navbar-styled-components'
 import { MdHome } from 'react-icons/md'
-import { Link } from 'react-router-dom'
 import {
   FaBook,
   FaChalkboardTeacher,
@@ -25,19 +24,19 @@ const SideBar = () => {
         <StyledLink to='/admin'>
           Home <MdHome />
         </StyledLink>
-        <StyledLink>
+        <StyledLink to='/admin/courses'>
           Course <FaBook />
         </StyledLink>
         <StyledLink to='/admin/students'>
           Student <FaUserGraduate />
         </StyledLink>
-        <StyledLink>
+        <StyledLink to='/admin/staffs'>
           Staff <FaChalkboardTeacher />
         </StyledLink>
-        <StyledLink>
+        <StyledLink to='/admin/attendance'>
           Attendance <BsCalendarFill />
         </StyledLink>
-        <StyledLink>
+        <StyledLink to='/admin/assignments'>
           Assignment <FaCloudSunRain />
         </StyledLink>
       </SidebarUL>

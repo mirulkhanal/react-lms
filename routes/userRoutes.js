@@ -51,7 +51,7 @@ router.post('/create', (req, res) => {
               (err) => {
                 if (err) {
                   return res.status(501).send({
-                    error: errr,
+                    error: err,
                   })
                 }
                 return res.send({ message: 'Successfully created a user' })
@@ -108,7 +108,7 @@ router.patch('/edit/:uuid', (req, res) => {
     )
   } else {
     res.status(501).send({
-      error: 'Cannot edit userID, userName or password',
+      error: 'Cannot edit userID or password',
     })
   }
 })
