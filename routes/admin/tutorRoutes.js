@@ -26,7 +26,7 @@ router.post('/add', (req, res) => {
     return res.send({ message: 'Malformed request' })
   }
   db.query(
-    "INSERT INTO 'tutor_records'('tutorID', 'name', 'contact', 'address', 'email', 'courseID') VALUES (?,?,?,?,?,?)",
+    'INSERT INTO tutor_records (tutorID,name,contact,address,email,courseID) VALUES (?,?,?,?,?,?)',
     [tutorID, name, contact, address, email, courseID],
     (err) => {
       if (err) return res.status(501).send({ error: err })

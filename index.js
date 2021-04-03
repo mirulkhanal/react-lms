@@ -9,11 +9,14 @@ const courseRoutes = require('./routes/admin/courseRoutes')
 const studentRoutes = require('./routes/admin/studentRoutes')
 const noticeRoutes = require('./routes/admin/noticeRoutes')
 const tutorRoutes = require('./routes/admin/tutorRoutes')
+const moduleRoutes = require('./routes/admin/modulesRoutes')
+const attendanceRoutes = require('./routes/tutor/attendanceRoutes')
 // custom middlewares import
 const {
   verifyLogin,
   verifyAdmin,
   verifyStudent,
+  verifyTutor,
 } = require('./middlewares/authMiddleware')
 
 // express app initialization
@@ -32,9 +35,11 @@ app.use(cookieParser())
 app.use('/auth', authRoutes)
 app.use('/users', verifyLogin, verifyAdmin, userRoutes)
 app.use('/courses', verifyLogin, verifyAdmin, courseRoutes)
-app.use('/student', verifyLogin, verifyAdmin, studentRoutes)
-app.use('/notice', verifyLogin, verifyAdmin, noticeRoutes)
-app.use('/tutor', verifyLogin, verifyAdmin, tutorRoutes)
+app.use('/students', verifyLogin, verifyAdmin, studentRoutes)
+app.use('/notices', verifyLogin, verifyAdmin, noticeRoutes)
+app.use('/tutors', verifyLogin, verifyAdmin, tutorRoutes)
+app.use('/modules', verifyLogin, verifyAdmin, moduleRoutes)
+app.use('/attendance', verifyLogin, verifyTutor, attendanceRoutes)
 
 // 404 error handling
 app.use((req, res) => {

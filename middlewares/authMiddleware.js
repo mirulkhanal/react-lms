@@ -43,4 +43,14 @@ const verifyStudent = (req, res, next) => {
 
   next()
 }
-module.exports = { verifyLogin, verifyAdmin, verifyStudent }
+const verifyTutor = (req, res, next) => {
+  if (!req.user)
+    return res.status(400).send({
+      error: 'Invalid token or expired',
+    })
+  if (req.user.type !== ACCOUNT_TYPE.TUTOR)
+    return res.status(401).send({ error: 'Unauthorized access' })
+
+  next()
+}
+module.exports = { verifyLogin, verifyAdmin, verifyStudent, verifyTutor }

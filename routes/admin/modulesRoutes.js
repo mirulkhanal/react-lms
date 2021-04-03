@@ -44,7 +44,7 @@ router.post('/add', (req, res) => {
             (err) => {
               if (err) {
                 return res.status(501).send({
-                  error: errr,
+                  error: err,
                 })
               }
               return res.send({ message: 'Successfully added a module' })

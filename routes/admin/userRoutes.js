@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 })
 
 // create user route
-router.post('/create', (req, res) => {
+router.post('/add', (req, res) => {
   const username = req.body.username
   const password = req.body.password
   const uuid = req.body.uuid

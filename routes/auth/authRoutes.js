@@ -62,6 +62,7 @@ router.get('/verify', (req, res) => {
     return res.send({
       verified: true,
       type: user.type,
+      uuid: user.uuid,
     })
   } catch (err) {
     return res.send({ verified: false })
