@@ -3,11 +3,12 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
 // routes
-const authRoutes = require('./routes/authRoutes')
-const userRoutes = require('./routes/userRoutes')
-const courseRoutes = require('./routes/courseRoutes')
-const studentRoutes = require('./routes/studentRoutes')
-const noticeRoutes = require('./routes/noticeRoutes')
+const authRoutes = require('./routes/auth/authRoutes')
+const userRoutes = require('./routes/admin/userRoutes')
+const courseRoutes = require('./routes/admin/courseRoutes')
+const studentRoutes = require('./routes/admin/studentRoutes')
+const noticeRoutes = require('./routes/admin/noticeRoutes')
+const tutorRoutes = require('./routes/admin/tutorRoutes')
 // custom middlewares import
 const {
   verifyLogin,
@@ -33,6 +34,7 @@ app.use('/users', verifyLogin, verifyAdmin, userRoutes)
 app.use('/courses', verifyLogin, verifyAdmin, courseRoutes)
 app.use('/student', verifyLogin, verifyAdmin, studentRoutes)
 app.use('/notice', verifyLogin, verifyAdmin, noticeRoutes)
+app.use('/tutor', verifyLogin, verifyAdmin, tutorRoutes)
 
 // 404 error handling
 app.use((req, res) => {

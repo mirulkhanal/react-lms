@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const db = require('../models/db')
+const db = require('../../models/db')
 router.get('/', (req, res) => {
   try {
     db.query('SELECT * FROM announcements', (err, results) => {

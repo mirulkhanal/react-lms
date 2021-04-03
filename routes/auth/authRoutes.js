@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const db = require('../models/db')
+const db = require('../../models/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv').config()
@@ -27,14 +27,10 @@ router.post('/login', async (req, res) => {
             const token = jwt.sign(
               {
                 username: users[0].username,
-                name: users[0].name,
                 uuid: users[0].uuid,
                 type: users[0].type,
               },
-              process.env.JWT_SECRET,
-              {
-                expiresIn: '24h',
-              }
+              process.env.JWT_SECRET
             )
             // send a coookie with the response so browser can store credentials in an http coookie
             res

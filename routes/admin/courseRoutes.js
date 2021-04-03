@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const db = require('../models/db')
+const db = require('../../models/db')
 
 // retrieve all available courses
 router.get('/', (req, res) => {
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 })
 
 // create a course
-router.post('/create', (req, res) => {
+router.post('/add', (req, res) => {
   const courseID = req.body.courseID
   const courseName = req.body.courseName
   const moduleID = req.body.moduleID
@@ -39,7 +39,7 @@ router.post('/create', (req, res) => {
           })
         } else {
           db.query(
-            'INSERT INTO courses (courseID,courseName,moduleID) VALUES (?,?,?)',
+            'INSERT INTO courses (courseID,course_name,moduleID) VALUES (?,?,?)',
             [courseID, courseName, moduleID],
             (err) => {
               if (err) {
@@ -65,7 +65,7 @@ router.patch('/edit/:id', (req, res) => {
     property &&
     newValue &&
     (property === 'courseID' ||
-      property === 'courseName' ||
+      property === 'course_name' ||
       property === 'moduleID')
   ) {
     db.query(
@@ -85,7 +85,7 @@ router.patch('/edit/:id', (req, res) => {
   } else {
     res.status(501).send({
       error:
-        "Invalid property name. Try 'courseName', 'courseID' or 'moduleID'",
+        "Invalid property name. Try 'course_name', 'courseID' or 'moduleID'",
     })
   }
 })

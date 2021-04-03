@@ -1,6 +1,7 @@
 const router = require('express').Router()
-const db = require('../models/db')
+const db = require('../../models/db')
 const { v4: uuidv4 } = require('uuid')
+
 router.get('/', (req, res) => {
   db.query('SELECT * FROM student_records', (err, results) => {
     if (err)
@@ -13,21 +14,21 @@ router.get('/', (req, res) => {
   })
 })
 router.post('/add', (req, res) => {
+  const studentID = uuidv4()
   const name = req.body.name
-  const email = req.body.email
   const address = req.body.address
-  const phone = req.body.phone
-  const courseID = req.body.courseID
-  const uuid = uuidv4()
+  const email = req.body.email
+  const contact = req.body.contact
+  const moduleID = req.body.moduleID
 
-  if (!name || !email || !address || !phone || !courseID || !uuid) {
+  if (!name || !email || !address || !contact || !moduleID || !studentID) {
     return res.status(400).send({
-      error: 'Missing property',
+      error: 'Malformed request',
     })
   }
   db.query(
-    'SELECT * FROM student_records WHERE uuid = ? ',
-    [uuid],
+    'SELECT * FROM student_records WHERE studentID = ? ',
+    [studentID],
     (err, results) => {
       if (results && results.length > 0) {
         return res.status(501).send({
@@ -40,8 +41,8 @@ router.post('/add', (req, res) => {
         })
       }
       db.query(
-        'INSERT INTO student_records (name, email, address, phone, courseID, uuid) VALUES(?,?,?,?,?,?)',
-        [name, email, address, phone, courseID, uuid],
+        'INSERT INTO student_records (studentID,name,address,email,contact,moduleID) VALUES(?,?,?,?,?,?)',
+        [studentID, name, address, email, contact, moduleID],
         (err) => {
           if (err) {
             return res.status(501).send({

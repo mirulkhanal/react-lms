@@ -1,10 +1,9 @@
 const router = require('express').Router()
-const db = require('../models/db')
+const db = require('../../models/db')
 const bcrypt = require('bcrypt')
-const { v4: uuidv4 } = require('uuid')
 // get all users, without the password
 router.get('/', (req, res) => {
-  db.query('SELECT id,uuid,username,name,type FROM users', (err, results) => {
+  db.query('SELECT id,uuid,username,type FROM users', (err, results) => {
     if (err) {
       res.status(501).send({
         error: error,
@@ -20,12 +19,11 @@ router.get('/', (req, res) => {
 router.post('/create', (req, res) => {
   const username = req.body.username
   const password = req.body.password
-  const name = req.body.name
-  const uuid = uuidv4()
+  const uuid = req.body.uuid
   const type = req.body.type
 
-  if (!username || !password || !name || !uuid || !type) {
-    res.send({ message: 'Please provide all the required fields' })
+  if (!username || !password || !uuid || !type) {
+    res.send({ message: 'Malformed request' })
   } else {
     db.query(
       'SELECT uuid FROM users WHERE username = ?',
@@ -46,8 +44,8 @@ router.post('/create', (req, res) => {
               return res.status(501).send({ error: err })
             }
             db.query(
-              'INSERT INTO users (username,password,name,uuid,type) VALUES (?,?,?,?,?)',
-              [username, hashedPassword, name, uuid, type],
+              'INSERT INTO users (username,password,uuid,type) VALUES (?,?,?,?)',
+              [username, hashedPassword, uuid, type],
               (err) => {
                 if (err) {
                   return res.status(501).send({
@@ -91,7 +89,7 @@ router.patch('/edit/:uuid', (req, res) => {
   const userID = req.params.uuid
   const property = req.body.property
   const newValue = req.body.value
-  if (property === 'name' || property === 'username') {
+  if (property === 'type' || property === 'username') {
     db.query(
       `UPDATE users SET ${property} = ? WHERE uuid = ?`,
       [newValue, userID],
