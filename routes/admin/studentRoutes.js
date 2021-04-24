@@ -49,9 +49,20 @@ router.post('/add', (req, res) => {
               error: err,
             })
           }
-          res.send({
-            message: 'Successfully added a student record',
-          })
+          db.query(
+            'INSERT INTO attendance (studentID,presence,lastDate) VALUES(?,?,?)',
+            [studentID, 0, Date.now()],
+            (err) => {
+              if (err) {
+                return res.status(501).send({
+                  error: err,
+                })
+              }
+              res.send({
+                message: 'Successfully added a attendace + student record',
+              })
+            }
+          )
         }
       )
     }

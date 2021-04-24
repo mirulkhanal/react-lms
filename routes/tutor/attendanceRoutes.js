@@ -4,7 +4,7 @@ const db = require('../../models/db')
 router.get('/', (req, res) => {
   //   res.send(req.user)
   db.query(
-    'SELECT * FROM attendance WHERE courseID = (SELECT courseID FROM tutor_records WHERE tutorID = ?)',
+    'SELECT * FROM attendance WHERE courseID IN (SELECT courseID FROM courses WHERE tutorID = ?)',
     [req.user.uuid],
     (err, results) => {
       if (err)
@@ -24,8 +24,8 @@ router.post('/add', (req, res) => {
   const isPresent = req.body.isPresent
 
   db.query(
-    'SELECT presence,lastDate FROM attendance WHERE studentID = ? AND courseID=?',
-    [studentID, courseID],
+    'SELECT courseID,presence,lastDate FROM attendance WHERE studentID = ? AND courseID = (SELECT courseID FROM tutor_records WHERE tutorID = ?)',
+    [studentID, req.user.uuid],
     (err, results) => {
       if (err) {
         return res.status(501).send({
@@ -36,30 +36,52 @@ router.post('/add', (req, res) => {
         try {
           let presence = parseInt(results[0].presence)
           const lastDate = parseInt(results[0].lastDate)
-          // console.log(lastDate * 60)
+          const courseIdDb = results[0].courseID
           const currentDate = Date.now()
-          console.log(typeof currentDate)
-          if (currentDate >= lastDate + 60 * 60) {
-            if (isPresent === true) {
-              presence += 1
-              db.query(
-                'UPDATE attendance SET presence = ?, lastDate = ? WHERE studentID = ? AND courseID=?',
-                [presence, currentDate, studentID, courseID],
-                (err) => {
-                  if (err) {
-                    return res.status(501).send({
-                      error: err,
+
+          if (courseIdDb === courseId) {
+            if (currentDate >= lastDate + 60 * 60) {
+              if (isPresent === true) {
+                presence += 1
+                db.query(
+                  'UPDATE attendance SET presence = ?, lastDate = ? WHERE studentID = ? AND courseID=?',
+                  [presence, currentDate, studentID, courseID],
+                  (err) => {
+                    if (err) {
+                      return res.status(501).send({
+                        error: err,
+                      })
+                    }
+                    return res.status(200).send({
+                      message: 'Success',
                     })
                   }
-                  return res.status(200).send({
-                    message: 'Success',
-                  })
-                }
-              )
+                )
+              } else {
+                db.query(
+                  'UPDATE attendance SET lastDate = ? WHERE studentID = ? AND courseID=?',
+                  [currentDate, studentID, courseID],
+                  (err) => {
+                    if (err) {
+                      return res.status(501).send({
+                        error: err,
+                      })
+                    }
+                    return res.status(200).send({
+                      message: 'Attendance not updated',
+                    })
+                  }
+                )
+              }
+            } else {
+              res.status(400).send({
+                error: 'Cannot process request',
+              })
             }
           } else {
-            res.status(400).send({
-              error: 'Cannot process request',
+            res.status(200).send({
+              message:
+                'You can only change attendance records for your own courses',
             })
           }
         } catch (error) {

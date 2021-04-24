@@ -11,6 +11,7 @@ const noticeRoutes = require('./routes/admin/noticeRoutes')
 const tutorRoutes = require('./routes/admin/tutorRoutes')
 const moduleRoutes = require('./routes/admin/modulesRoutes')
 const attendanceRoutes = require('./routes/tutor/attendanceRoutes')
+const assignmentRoutes = require('./routes/tutor/assignmentRoutes')
 // custom middlewares import
 const {
   verifyLogin,
@@ -40,6 +41,7 @@ app.use('/notices', verifyLogin, verifyAdmin, noticeRoutes)
 app.use('/tutors', verifyLogin, verifyAdmin, tutorRoutes)
 app.use('/modules', verifyLogin, verifyAdmin, moduleRoutes)
 app.use('/attendance', verifyLogin, verifyTutor, attendanceRoutes)
+app.use('/assignments', verifyLogin, verifyTutor, assignmentRoutes)
 
 // 404 error handling
 app.use((req, res) => {

@@ -20,14 +20,13 @@ router.post('/add', (req, res) => {
   const contact = req.body.contact
   const address = req.body.address
   const email = req.body.email
-  const courseID = req.body.courseID
 
-  if (!tutorID || !name || !contact || !address || !email || !courseID) {
+  if (!tutorID || !name || !contact || !address || !email) {
     return res.send({ message: 'Malformed request' })
   }
   db.query(
-    'INSERT INTO tutor_records (tutorID,name,contact,address,email,courseID) VALUES (?,?,?,?,?,?)',
-    [tutorID, name, contact, address, email, courseID],
+    'INSERT INTO tutor_records (tutorID,name,contact,address,email) VALUES (?,?,?,?,?)',
+    [tutorID, name, contact, address, email],
     (err) => {
       if (err) return res.status(501).send({ error: err })
       res.send({

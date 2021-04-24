@@ -8,11 +8,13 @@ import {
   FaCloudSunRain,
 } from 'react-icons/fa'
 import { BsCalendarFill } from 'react-icons/bs'
+
 const SideBar = () => {
   return (
     <div
       style={{
         width: '50vw',
+        height: '100vh',
         padding: '0',
         margin: '0',
         display: 'flex',
@@ -25,19 +27,22 @@ const SideBar = () => {
           Home <MdHome />
         </StyledLink>
         <StyledLink to='/admin/courses'>
-          Course <FaBook />
+          Courses <FaBook />
         </StyledLink>
         <StyledLink to='/admin/students'>
-          Student <FaUserGraduate />
+          Students <FaUserGraduate />
         </StyledLink>
-        <StyledLink to='/admin/staffs'>
-          Staff <FaChalkboardTeacher />
+        <StyledLink to='/admin/tutors'>
+          Tutors <FaChalkboardTeacher />
+        </StyledLink>{' '}
+        <StyledLink to='/admin/users'>
+          Users <FaChalkboardTeacher />
         </StyledLink>
         <StyledLink to='/admin/attendance'>
           Attendance <BsCalendarFill />
         </StyledLink>
         <StyledLink to='/admin/assignments'>
-          Assignment <FaCloudSunRain />
+          Assignments <FaCloudSunRain />
         </StyledLink>
       </SidebarUL>
       <div>

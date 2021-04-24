@@ -11,7 +11,6 @@ export const NoticeBoard = styled.div`
   align-items: center;
   flex-direction: column;
   box-shadow: 7px 0px 34px 18px #fbc3bc;
-  font-family: 'Josefin Sans', sans-serif;
   & > p {
     font-size: 1.3rem;
     padding: 30px;
