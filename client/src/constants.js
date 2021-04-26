@@ -85,3 +85,8 @@ export const USER_COLUMNS = [
     accessor: 'type',
   },
 ]
+
+export const REQUEST_METHODS = {
+  GET: 'GET',
+  POST: 'POST',
+}

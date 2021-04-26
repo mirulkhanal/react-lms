@@ -1,27 +1,23 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import TableComponent from '../../generic/TableComponent'
-import { STUDENT_COLUMNS } from '../../../constants'
+import { REQUEST_METHODS, STUDENT_COLUMNS } from '../../../constants'
 import { FaPlusCircle } from 'react-icons/fa'
 import Modal from '../../generic/Modal'
+import useApi from '../../../hooks/useApi'
 
 const Student = () => {
-  const [data, setData] = useState([])
+  // const [data, setData] = useState([])
   const [open, setOpen] = useState(false)
-  const requestData = async () => {
-    const response = await axios.get('http://localhost:5000/students')
-    setData(response.data.results)
-  }
+  const { loading, error, data } = useApi(
+    'http://localhost:5000/students',
+    null,
+    REQUEST_METHODS.GET
+  )
 
   const handleToggleModal = () => {
     setOpen((prevState) => !prevState)
   }
-
-  useEffect(() => {
-    requestData()
-
-    return requestData
-  }, [])
 
   return (
     <div
@@ -39,8 +35,18 @@ const Student = () => {
         }}>
         <FaPlusCircle /> Add Student
       </button>
+
       <Modal state={{ open, setOpen }} />
-      {data && <TableComponent records={data} COLUMNS={STUDENT_COLUMNS} />}
+
+      {loading ? (
+        <p>Loading</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : data ? (
+        <TableComponent records={data} open={open} COLUMNS={STUDENT_COLUMNS} />
+      ) : (
+        <p>Request timed out</p>
+      )}
     </div>
   )
 }

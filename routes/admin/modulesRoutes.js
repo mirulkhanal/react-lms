@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       })
     }
     return res.send({
-      modules: results,
+      results,
     })
   })
 })
@@ -39,7 +39,7 @@ router.post('/add', (req, res) => {
           })
         } else {
           db.query(
-            'INSERT INTO modules (moduleID,module_name,module_leader) VALUES (?,?,?)',
+            'INSERT INTO modules (moduleID,moduleName,moduleLeader) VALUES (?,?,?)',
             [moduleID, moduleName, moduleLeader],
             (err) => {
               if (err) {
@@ -65,8 +65,8 @@ router.patch('/edit/:id', (req, res) => {
     property &&
     newValue &&
     (property === 'moduleID' ||
-      property === 'module_name' ||
-      property === 'module_leader')
+      property === 'moduleName' ||
+      property === 'moduleLeader')
   ) {
     db.query(
       `UPDATE modules SET ${property} = ? WHERE moduleID = ?`,
@@ -85,7 +85,7 @@ router.patch('/edit/:id', (req, res) => {
   } else {
     return res.status(501).send({
       error:
-        "Invalid property name. Try 'module_name', 'module_leader' or 'moduleID'",
+        "Invalid property name. Try 'moduleName', 'moduleLeader' or 'moduleID'",
     })
   }
 })

@@ -45,7 +45,9 @@ app.use('/assignments', verifyLogin, verifyTutor, assignmentRoutes)
 
 // 404 error handling
 app.use((req, res) => {
-  res.sendFile('./404.html', { root: __dirname })
+  res.status(400).send({
+    error: 'Inavlid request, please check the URL and try again',
+  })
 })
 const PORT = process.env.PORT || 5000
 app.listen(PORT, (err) => {

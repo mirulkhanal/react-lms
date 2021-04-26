@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       })
     }
     res.send({
-      users: results,
+      results,
     })
   })
 })

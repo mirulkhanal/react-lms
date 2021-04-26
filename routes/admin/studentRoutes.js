@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
   db.query('SELECT * FROM student_records', (err, results) => {
     if (err)
       return res.send(501).send({
-        error: err,
+        error: err.message,
       })
     res.send({
       results,
@@ -23,7 +23,7 @@ router.post('/add', (req, res) => {
 
   if (!name || !email || !address || !contact || !moduleID || !studentID) {
     return res.status(400).send({
-      error: 'Malformed request',
+      error: 'Please enter all required fields',
     })
   }
   db.query(
@@ -37,7 +37,7 @@ router.post('/add', (req, res) => {
       }
       if (err) {
         return res.status(501).send({
-          error: err,
+          error: err.message,
         })
       }
       db.query(
@@ -46,7 +46,7 @@ router.post('/add', (req, res) => {
         (err) => {
           if (err) {
             return res.status(501).send({
-              error: err,
+              error: err.message,
             })
           }
           db.query(
@@ -55,11 +55,12 @@ router.post('/add', (req, res) => {
             (err) => {
               if (err) {
                 return res.status(501).send({
-                  error: err,
+                  error: err.message,
                 })
               }
               res.send({
-                message: 'Successfully added a attendace + student record',
+                message:
+                  'Successfully added a student record and created an attendance entry',
               })
             }
           )

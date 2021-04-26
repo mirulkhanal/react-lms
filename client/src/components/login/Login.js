@@ -14,18 +14,28 @@ const Login = () => {
   // saving the username and password to the app state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const { getLoggedIn } = useContext(AuthContext)
   const handleLogin = async () => {
-    try {
-      await axios.post('http://localhost:5000/auth/login', {
+    setLoading(true)
+    await axios
+      .post('http://localhost:5000/auth/login', {
         username,
         password,
       })
-      getLoggedIn()
-    } catch (err) {
-      console.log(err.message)
-    }
+      .then(() => {
+        getLoggedIn()
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false)
+        if (err.response) {
+          setError(err.response.data.error)
+          console.log(err.response.data.error)
+        }
+      })
   }
   return (
     <div
@@ -37,6 +47,7 @@ const Login = () => {
         boxShadow: '2px 13px 56px 9px #0D1321',
       }}>
       <LoginContainer>
+        {loading === true ? <p>Loading</p> : error ? <p>{error}</p> : ''}
         <TextBoxContainer>
           <TextBox
             placeholder='Username'
