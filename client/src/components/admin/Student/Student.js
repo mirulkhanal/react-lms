@@ -5,7 +5,9 @@ import { REQUEST_METHODS, STUDENT_COLUMNS } from '../../../constants'
 import { FaPlusCircle } from 'react-icons/fa'
 import Modal from '../../generic/Modal'
 import useApi from '../../../hooks/useApi'
-
+import Error from '../../generic/Error'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import Loader from 'react-loader-spinner'
 const Student = () => {
   // const [data, setData] = useState([])
   const [open, setOpen] = useState(false)
@@ -20,32 +22,35 @@ const Student = () => {
   }
 
   return (
+    // <Error message='Hello' />
     <div
       style={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%',
+        width: '80vw',
         flexDirection: 'column',
         background: '#ffeddf',
+        position: 'absolute',
+        right: 0,
       }}>
+      <Modal state={{ open, setOpen }} />
       <button
+        style={{ display: !open ? '' : 'none' }}
         onClick={() => {
           handleToggleModal()
         }}>
         <FaPlusCircle /> Add Student
-      </button>
-
-      <Modal state={{ open, setOpen }} />
-
+      </button>{' '}
+      <br />
       {loading ? (
-        <p>Loading</p>
+        <Loader type='Puff' color='#ff335c' height={100} width={100} />
       ) : error ? (
-        <p>{error}</p>
+        <Error message={error} />
       ) : data ? (
         <TableComponent records={data} open={open} COLUMNS={STUDENT_COLUMNS} />
       ) : (
-        <p>Request timed out</p>
+        <Loader type='ThreeDots' color='#ff335c' height={100} width={100} />
       )}
     </div>
   )

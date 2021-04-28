@@ -1,8 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { REQUEST_METHODS } from '../../constants'
-import useApi from '../../hooks/useApi'
-import '../../styles/forms.css'
+import { REQUEST_METHODS } from '../../../constants'
+import useApi from '../../../hooks/useApi'
+import '../../../styles/forms.css'
+import Error from '../../generic/Error'
+import { poster } from '../../../hooks/postAxios'
+import Success from '../../generic/Success'
 const AddStudentFormComponent = () => {
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
@@ -12,47 +15,53 @@ const AddStudentFormComponent = () => {
   const [selectedModule, setSelectedModule] = useState('CS')
   const [postError, setPostError] = useState(null)
   const [postLoading, setPostLoading] = useState(false)
+  const [success, setSuccess] = useState(null)
 
   const { loading, error, data } = useApi(
     'http://localhost:5000/modules',
     null,
-    REQUEST_METHODS.GET,
     (res) => {
       setModules(res)
     }
   )
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    setPostLoading(true)
-    await axios
-      .post('http://localhost:5000/students/add', {
+    poster(
+      'http://localhost:5000/students/add',
+      {
         name,
         address,
         email,
         contact: phone,
         moduleID: selectedModule,
-      })
-      .then((res) => {
-        setPostError(res.data.message)
-        setPostLoading(false)
-      })
-      .catch((err) => {
-        setPostLoading(false)
-        if (err.response) {
-          setPostError(err.response.data.error)
-          console.log(err.response.data.error)
-        }
-      })
-    setName('')
-    setAddress('')
-    setEmail('')
-    setPhone('')
+      },
+      setSuccess,
+      setPostError,
+      setPostLoading,
+      () => {
+        // setName('')
+        // setAddress('')
+        // setEmail('')
+        // setPhone('')
+        console.log(postError)
+        console.log(postLoading)
+        console.log(success)
+      }
+    )
   }
 
+  useEffect(() => {}, [postError])
   return (
     <>
-      {postError ? <p>{postError}</p> : postLoading ? <p>Loading</p> : ''}
+      {postError ? (
+        <Error message={postError} />
+      ) : postLoading ? (
+        <p>Loading</p>
+      ) : success ? (
+        <Success message={success} />
+      ) : (
+        ''
+      )}
 
       <form>
         <input
@@ -79,29 +88,21 @@ const AddStudentFormComponent = () => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
-        {error ? (
-          <p>{error}</p>
-        ) : loading ? (
-          <p>Loading</p>
-        ) : data ? (
-          <select
-            value={selectedModule}
-            onChange={(e) => {
-              setSelectedModule(e.target.value)
-            }}>
-            {modules &&
-              modules.map((module) => (
-                <option key={module.moduleID} value={module.moduleID}>
-                  {module.moduleName}
-                </option>
-              ))}
-            <option style={{ display: 'none' }} value='default'>
-              Select a module
-            </option>
-          </select>
-        ) : (
-          ''
-        )}
+        <select
+          value={selectedModule}
+          onChange={(e) => {
+            setSelectedModule(e.target.value)
+          }}>
+          {modules &&
+            modules.map((module) => (
+              <option key={module.moduleID} value={module.moduleID}>
+                {module.moduleName}
+              </option>
+            ))}
+          <option style={{ display: 'none' }} value='default'>
+            Select a module
+          </option>
+        </select>
 
         <button type='submit' onClick={(e) => handleSubmit(e)}>
           Submit

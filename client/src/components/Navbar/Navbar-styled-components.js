@@ -2,9 +2,13 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 export const SidebarContainer = styled.div`
   width: 20vw;
-  height: 100vh;
+  /* height: 105vh; */
   background-color: #ff5678;
   display: flex;
+  /* position: fixed; */
+  position: absolute;
+  left: 0;
+  bottom: 0;
   margin: 0;
 `
 

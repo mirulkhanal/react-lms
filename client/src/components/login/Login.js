@@ -9,6 +9,7 @@ import {
 import { ReadingSideDoodle } from 'react-open-doodles'
 import axios from 'axios'
 import AuthContext from '../../context/AuthContext'
+import Error from '../generic/Error'
 
 const Login = () => {
   // saving the username and password to the app state
@@ -18,7 +19,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
 
   const { getLoggedIn } = useContext(AuthContext)
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault()
     setLoading(true)
     await axios
       .post('http://localhost:5000/auth/login', {
@@ -47,7 +49,13 @@ const Login = () => {
         boxShadow: '2px 13px 56px 9px #0D1321',
       }}>
       <LoginContainer>
-        {loading === true ? <p>Loading</p> : error ? <p>{error}</p> : ''}
+        {loading === true ? (
+          <p>Loading</p>
+        ) : error ? (
+          <Error message={error} />
+        ) : (
+          ''
+        )}
         <TextBoxContainer>
           <TextBox
             placeholder='Username'
@@ -62,7 +70,7 @@ const Login = () => {
             type='password'
           />
         </TextBoxContainer>
-        <LoginButton onClick={handleLogin}>Login</LoginButton>
+        <LoginButton onSubmit={handleLogin} onClick={handleLogin} />
       </LoginContainer>
       <ImgContainer>
         <ReadingSideDoodle />

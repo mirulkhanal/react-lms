@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const db = require('../../models/db')
 const { v4: uuidv4 } = require('uuid')
+const { validateEmail, validatePhone } = require('../../functions/helpers')
 
 router.get('/', (req, res) => {
   db.query('SELECT * FROM student_records', (err, results) => {
@@ -26,6 +27,16 @@ router.post('/add', (req, res) => {
       error: 'Please enter all required fields',
     })
   }
+  if (!validateEmail(email)) {
+    return res.status(400).send({
+      error: 'The Email address is invalid',
+    })
+  }
+  // if (!validatePhone(contact)) {
+  //   return res.status(400).send({
+  //     error: 'The Phone number is invalid',
+  //   })
+  // }
   db.query(
     'SELECT * FROM student_records WHERE studentID = ? ',
     [studentID],

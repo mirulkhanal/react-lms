@@ -33,7 +33,7 @@ const TableComponent = ({ COLUMNS, records, open }) => {
     usePagination
   )
   return (
-    <div style={{ display: open ? 'none' : 'block' }}>
+    <div style={{ display: open ? 'none' : '' }}>
       <TableFilterComponent
         filter={state.globalFilter}
         setFilter={setGlobalFilter}

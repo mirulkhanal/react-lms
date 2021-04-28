@@ -1,0 +1,19 @@
+.modal-outer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+.modal-inner{
+    position: relative;
+    width: 50vw;
+    height: 50vh;
+    background-color: #ff5678;
+    margin: 50px;
+}
+.modal-content{
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

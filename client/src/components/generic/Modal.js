@@ -1,6 +1,12 @@
 // import { autorun } from 'mobx'
 import React, { useEffect, useRef } from 'react'
-import AddStudentFormComponent from './AddStudentFormComponent'
+import AddStudentFormComponent from '../admin/Student/AddStudentFormComponent'
+import ReactDom from 'react-dom'
+import { ZombieingDoodle } from 'react-open-doodles'
+import '../../styles/modal.css'
+import { ImgContainer } from '../login/Login-styled-components'
+import styled from 'styled-components'
+import { ImCross } from 'react-icons/im'
 
 const Modal = ({ state }) => {
   let modalRef = useRef(undefined)
@@ -19,22 +25,46 @@ const Modal = ({ state }) => {
     something()
     return something
   }, [])
-  return (
+  return ReactDom.createPortal(
     <div
-      ref={modalRef}
+      className='modal-outer'
       style={{
-        margin: 'auto',
-        verticalAlign: 'middle',
         position: 'absolute',
-        display: `${state.open ? 'block' : 'none'}`,
-        backgroundColor: '#ff5678',
-        width: '50%',
-        height: '80%',
+        display: `${state.open ? '' : 'none'}`,
+        width: '100vw',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        top: 0,
+        left: 0,
+        height: '100vh',
         boxShadow: '5px 5px 15px 5px #000000',
       }}>
-      <AddStudentFormComponent />
-    </div>
+      <div
+        ref={modalRef}
+        className='modal-inner'
+        style={{ display: `${state.open ? '' : 'none'}` }}>
+        <Close />
+        <div className='modal-content'>
+          <ClipContainer>
+            <ZombieingDoodle />
+          </ClipContainer>
+          <AddStudentFormComponent state={state} />
+        </div>
+      </div>
+    </div>,
+    document.getElementById('modal')
   )
 }
-
+export const ClipContainer = styled(ImgContainer)`
+  & > svg {
+    width: 50%;
+  }
+`
+export const Close = styled(ImCross)`
+  position: absolute;
+  padding: 10px;
+  right: 0;
+  top: 0;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+`
 export default Modal

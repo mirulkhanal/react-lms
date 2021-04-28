@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const LoginContainer = styled.div`
+export const LoginContainer = styled.form`
   width: 30%;
   height: 100%;
   background: #ff5678;
@@ -51,7 +51,10 @@ export const TextBox = styled.input`
     /* padding-left: 20px; */
   }
 `
-export const LoginButton = styled.button`
+export const LoginButton = styled.input.attrs({
+  type: 'submit',
+  value: 'Login',
+})`
   width: 167px;
   height: 47px;
   background: #0d1321;

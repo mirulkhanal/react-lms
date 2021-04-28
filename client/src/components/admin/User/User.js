@@ -1,18 +1,20 @@
-import axios from 'axios'
+// import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import TableComponent from '../../generic/TableComponent'
-import { USER_COLUMNS } from '../../../constants'
-
+import { REQUEST_METHODS, USER_COLUMNS } from '../../../constants'
+import useApi from '../../../hooks/useApi'
+import Error from '../../generic/Error'
 const User = () => {
-  const [data, setData] = useState([])
-  const requestData = async () => {
-    const response = await axios.get('http://localhost:5000/users')
-    setData(response.data.users)
-  }
-  useEffect(() => {
-    requestData()
-    return requestData
-  }, [])
+  const [userData, setUserData] = useState(null)
+  const { data, loading, error } = useApi(
+    'http://localhost:5000/user',
+    null,
+    REQUEST_METHODS.GET,
+    (data) => {
+      setUserData(data)
+    }
+  )
+
   return (
     <div
       style={{
@@ -22,7 +24,15 @@ const User = () => {
         width: '100%',
         background: '#ffeddf',
       }}>
-      {data && <TableComponent records={data} COLUMNS={USER_COLUMNS} />}
+      {userData ? (
+        <TableComponent records={data} COLUMNS={USER_COLUMNS} />
+      ) : error ? (
+        <Error message={error} />
+      ) : loading ? (
+        <p>loading</p>
+      ) : (
+        'Something went wrong'
+      )}
     </div>
   )
 }
